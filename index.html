@@ -36,7 +36,7 @@ button,input,textarea{font:inherit;color:inherit}
 header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;padding-block:28px 18px;border-bottom:1.5px solid var(--ink)}
 header.top h1{font-size:clamp(34px,6vw,52px);line-height:1}
 header.top h1 em{font-style:italic;color:var(--accent)}
-nav.tabs{display:flex;gap:6px}
+nav.tabs{display:flex;gap:6px;flex-wrap:wrap}
 nav.tabs button{border:1.5px solid var(--ink);background:transparent;border-radius:999px;padding:7px 16px;font-weight:600;cursor:pointer}
 nav.tabs button[aria-current="page"]{background:var(--ink);color:var(--paper)}
 .notice{margin-top:14px;padding:10px 14px;border-radius:10px;background:var(--warn-soft);color:var(--warn);font-size:13px}
@@ -187,6 +187,38 @@ textarea.sm{min-height:60px}
 .editor .fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
 .editor label span{display:block;font-size:12px;color:var(--muted);margin-bottom:3px}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:999px;font-size:13px;font-weight:600;z-index:20}
+
+/* calendario */
+.calbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:24px}
+.calbar h2{font-size:clamp(28px,4.4vw,40px);text-transform:capitalize;margin-right:auto}
+.calbar .btn{min-width:38px}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin-top:14px}
+.cal .dow{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:0 4px 4px}
+.day{min-height:104px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:4px;text-align:left;cursor:pointer;min-width:0}
+.day.out{background:transparent;border-style:dashed;opacity:.5}
+.day.hoy{border:2px solid var(--accent)}
+.day[aria-pressed="true"]{outline:2px solid var(--ink);outline-offset:1px}
+.day .dn{font-size:13px;font-weight:600;font-variant-numeric:tabular-nums}
+.day.hoy .dn{color:var(--accent)}
+.ev{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:11.5px;line-height:1.25;padding:3px 6px;border-radius:5px;color:#1F1B2D;overflow:hidden;overflow-wrap:anywhere}
+.ev.dl{background:transparent!important;border:1.5px dashed var(--ink);color:var(--ink)}
+.dots{display:none;gap:3px;flex-wrap:wrap}
+.dots i{width:8px;height:8px;border-radius:50%;display:block;border:1px solid #1F1B2D33}
+.dots i.dl{background:transparent;border:1.5px dashed var(--ink)}
+@media (max-width:640px){.day{min-height:54px;padding:5px}.day .ev{display:none}.dots{display:flex}}
+.dayhead{margin-top:22px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.dayhead h3{font-size:24px}
+.evlist{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.evcard{display:grid;grid-template-columns:8px minmax(0,1fr);gap:12px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;text-align:left;cursor:pointer;min-width:0}
+.evcard:hover{border-color:var(--ink)}
+.evcard .sw{border-radius:4px}
+.evcard h4{font-size:19px;line-height:1.25;margin-top:2px}
+.evcard .sub{font-size:13px;color:var(--muted)}
+.evcard ul{margin:6px 0 0;padding-left:1.1em;font-size:13.5px}
+.evcard .when{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.undated{margin-top:30px}
+.undated h3{font-size:22px}
+.undated ul{margin:8px 0 0;padding-left:1.1em;font-size:14px;color:var(--muted)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
@@ -198,6 +230,7 @@ textarea.sm{min-height:60px}
     </div>
     <nav class="tabs" aria-label="Secciones">
       <button id="tab-materias" type="button" data-go="materias">Materias</button>
+      <button id="tab-calendario" type="button" data-go="calendario">Calendario</button>
       
     </nav>
   </header>
@@ -451,7 +484,7 @@ function persist(){const o={};Object.entries(store.clases).forEach(([cid,d])=>{O
  try{localStorage.setItem(LS,JSON.stringify({leido:o}))}catch(_){}}
 
 const notaOf=id=>null;const _notaOf=id=>{const n=store.notas[id];return n&&n.nota!=null&&n.nota!==""?Number(n.nota):null};
-const ui={view:"materias",subject:null,openCls:new Set(),openTxt:new Set(),selMonth:null,adding:null};
+const ui={view:"materias",calMonth:null,calDay:null,subject:null,openCls:new Set(),openTxt:new Set(),selMonth:null,adding:null};
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const fmtMoney=n=>"$ "+Number(n||0).toLocaleString("es-AR");
@@ -598,6 +631,44 @@ function editorHTML(k){const p=store.pagos[k]||{},paid=p.estado==="pagado";
   <div class="row"><button class="btn" type="button" data-act="paysave" data-month="${k}">${paid?"Guardar cambios":"Marcar como pagada"}</button>
   ${paid?`<button class="btn ghost" type="button" data-act="payundo" data-month="${k}">Quitar pago</button>`:""}<button class="btn link" type="button" data-act="payclose">Cerrar</button></div></div>`}
 
+
+/* calendario */
+const cap=x=>x[0].toUpperCase()+x.slice(1);
+function calEvents(){const ev=[];
+  SUBJECTS.forEach(s=>s.classes.forEach((c,i)=>{if(c.d)ev.push({d:c.d,type:"cls",s,i,c})}));
+  DEADLINES.forEach(x=>{const s=sub(x.id);ev.push({d:x.d,type:"dl",s,txt:x.txt})});
+  return ev.sort((a,b)=>a.d<b.d?-1:a.d>b.d?1:(a.type==="dl")-(b.type==="dl"))}
+const mKey=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+function evLabel(e){return e.type==="dl"?`Entrega · ${e.s?e.s.short:""}`:`Clase ${e.i+1} · ${e.s.short}`}
+function evCard(e){const col=e.s?e.s.color:"var(--line)";
+  if(e.type==="dl")return `<button class="evcard" type="button" data-sub="${e.s?e.s.id:""}"><span class="sw" style="background:transparent;border:1.5px dashed var(--ink)"></span><span style="min-width:0"><span class="when">Entrega · ${fmtD(e.d)}</span><h4>${esc(e.txt)}</h4><span class="sub">${esc(e.s?e.s.name:"")}</span></span></button>`;
+  const lec=(e.c.t||[]).map(t=>t.replace(/^D:/,""));
+  return `<button class="evcard" type="button" data-sub="${e.s.id}" data-cls="${e.i}"><span class="sw" style="background:${col}"></span><span style="min-width:0">
+    <span class="when">${fmtD(e.d)} · Clase ${e.i+1}${e.c.mod?" · "+esc(e.c.mod):""}</span><h4>${esc(e.c.tema)}</h4><span class="sub">${esc(e.s.name)} · ${esc(e.s.prof)}</span>
+    ${lec.length?`<ul>${lec.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>`:""}</span></button>`}
+function viewCalendario(){
+  const t=today(),all=calEvents();
+  if(!ui.calMonth)ui.calMonth=mKey(t);
+  const [y,m]=ui.calMonth.split("-").map(Number),first=new Date(y,m-1,1),dim=new Date(y,m,0).getDate();
+  const off=(first.getDay()+6)%7;const by={};all.forEach(e=>{(by[e.d]=by[e.d]||[]).push(e)});
+  let h=`<div class="calbar"><h2>${MES[m-1]} ${y}</h2><button class="btn ghost" type="button" data-act="calprev" aria-label="Mes anterior">←</button><button class="btn ghost" type="button" data-act="caltoday">Hoy</button><button class="btn ghost" type="button" data-act="calnext" aria-label="Mes siguiente">→</button></div>`;
+  h+=`<div class="cal" role="grid" aria-label="Calendario de ${MES[m-1]} ${y}">`+["lun","mar","mié","jue","vie","sáb","dom"].map(d=>`<div class="dow">${d}</div>`).join("");
+  const cells=Math.ceil((off+dim)/7)*7;
+  for(let k=0;k<cells;k++){const d=new Date(y,m-1,1-off+k),ds=iso(d),out=d.getMonth()!==m-1,evs=by[ds]||[];
+    h+=`<button class="day ${out?"out":""} ${ds===iso(t)?"hoy":""}" type="button" data-act="calday" data-day="${ds}" aria-pressed="${ui.calDay===ds}" aria-label="${d.getDate()} de ${MES[d.getMonth()]}${evs.length?`, ${evs.length} evento${evs.length>1?"s":""}`:""}">
+      <span class="dn">${d.getDate()}</span>${evs.map(e=>`<span class="ev ${e.type==="dl"?"dl":""}" style="background:${e.s?e.s.color:"var(--line)"}">${esc(evLabel(e))}</span>`).join("")}
+      <span class="dots">${evs.map(e=>`<i class="${e.type==="dl"?"dl":""}" style="${e.type==="dl"?"":"background:"+e.s.color}"></i>`).join("")}</span></button>`}
+  h+=`</div>`;
+  if(ui.calDay&&ui.calDay.startsWith(ui.calMonth)){const evs=by[ui.calDay]||[],d=pd(ui.calDay);
+    h+=`<div class="dayhead"><h3>${cap(DIA[d.getDay()])} ${d.getDate()} de ${MES[d.getMonth()]}</h3><button class="btn link" type="button" data-act="caldayclose">Ver todo el mes</button></div>
+      <div class="evlist">${evs.length?evs.map(evCard).join(""):'<div class="empty">No hay clases ni entregas este día.</div>'}</div>`}
+  else{const evs=all.filter(e=>e.d.startsWith(ui.calMonth));
+    h+=`<div class="dayhead"><h3>Clases y entregas de ${MES[m-1]}</h3><span class="lbl">${evs.length} en total</span></div>
+      <div class="evlist">${evs.length?evs.map(evCard).join(""):'<div class="empty">No hay clases ni entregas con fecha en este mes.</div>'}</div>`}
+  const und=SUBJECTS.filter(s=>s.classes.some(c=>!c.d)).map(s=>{const n=s.classes.filter(c=>!c.d).length;return `<li>${esc(s.name)}: ${n===s.classes.length?"todas las clases":`${n} clase${n>1?"s":""}`}</li>`});
+  if(und.length)h+=`<section class="undated"><h3>Sin fecha en el programa</h3><p class="note">Estas clases no tienen fecha en el programa, por eso no aparecen en el calendario. Si me pasás las fechas, las sumo.</p><ul>${und.join("")}</ul></section>`;
+  return h;
+}
 /* ============ Lectura de resúmenes ============ */
 const plain=t=>String(t||"").replace(/^#+\s*/gm,"").replace(/\*\*/g,"").replace(/\s+/g," ").trim();
 const words=t=>plain(t).split(" ").filter(Boolean).length;
@@ -637,7 +708,7 @@ function render(){
   pending=false;
   document.querySelectorAll("nav.tabs button").forEach(b=>b.setAttribute("aria-current",b.dataset.go===ui.view?"page":"false"));
   const y=scrollY;
-  $("#app").innerHTML=  ui.read?viewRead(): ui.subject?viewSubject(sub(ui.subject)):viewMaterias();
+  $("#app").innerHTML=  ui.view==="calendario"?viewCalendario(): ui.read?viewRead(): ui.subject?viewSubject(sub(ui.subject)):viewMaterias();
   scrollTo(0,y);
 }
 document.addEventListener("focusout",()=>setTimeout(()=>{if(pending)render()},0));
@@ -661,6 +732,10 @@ document.addEventListener("click",async e=>{
   const b=e.target.closest("[data-act]");if(!b)return;
   const act=b.dataset.act,s=b.dataset.s,i=+b.dataset.i,k=b.dataset.k,key=s?clsKey(s,i):null,tk=key?key+"-"+k:b.dataset.tk;
   if(act==="read"){e.preventDefault();openRead(s,i,k);return}
+  if(act==="calprev"||act==="calnext"){const [y,m]=ui.calMonth.split("-").map(Number);const d=new Date(y,m-1+(act==="calnext"?1:-1),1);ui.calMonth=mKey(d);ui.calDay=null;render();return}
+  if(act==="caltoday"){ui.calMonth=mKey(today());ui.calDay=iso(today());render();return}
+  if(act==="calday"){const ds=b.dataset.day;if(!ds.startsWith(ui.calMonth))ui.calMonth=ds.slice(0,7);ui.calDay=ui.calDay===ds?null:ds;render();return}
+  if(act==="caldayclose"){ui.calDay=null;render();return}
   if(act==="cancel"){ui.adding=null;render();return}
   if(act==="editres"){ui.adding="res-"+b.dataset.tk;render();return}
   if(act==="openex"){ui.adding="ex-"+b.dataset.tk;render();$("#exq-"+CSS.escape(b.dataset.tk))?.focus();return}
@@ -688,7 +763,7 @@ document.addEventListener("change",e=>{const b=e.target;if(b.dataset.act!=="leid
 
 /* inicio */
 (function init(){const h=(location.hash||"").slice(1);
-  if(h.startsWith("m-")&&sub(h.slice(2))){ui.subject=h.slice(2)}
+  if(h==="calendario")ui.view="calendario";else if(h.startsWith("m-")&&sub(h.slice(2))){ui.subject=h.slice(2)}
   else if(h.startsWith("r-")){const m=h.match(/^r-([A-Z0-9]+)-c(\d+)-(x?\d+)$/);if(m&&sub(m[1])){ui.subject=m[1];ui.read={s:m[1],i:+m[2]-1,k:m[3]}}}
   render();
 })();
