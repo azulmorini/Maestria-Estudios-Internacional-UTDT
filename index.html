@@ -210,12 +210,14 @@ textarea.sm{min-height:60px}
 
 
 /* la maestría */
-.mgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:0 32px;margin-top:22px}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:0 32px;margin-top:22px}
 .mblock{border-top:1px solid var(--ink);padding:14px 0 22px;min-width:0}
 .mblock h3{font-size:30px;font-weight:400;line-height:1.05;margin-top:4px}
 .mblock p{margin:8px 0 0;max-width:62ch}
 .mlist{list-style:none;margin:10px 0 0;padding:0}
-.mlist li{padding:7px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.mlist li{padding:8px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:baseline;gap:16px}
+.mlist li span:first-child{min-width:0}
+.mlist li span:last-child{flex:none;text-align:right}
 .mlist li span:last-child{color:var(--muted);font-size:12.5px}
 .mlist li.ok span:first-child::before{content:"✓ ";color:var(--ok)}
 .mfacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0 24px;margin-top:22px}
@@ -818,29 +820,19 @@ function viewPromedio(){
 
 /* la maestría */
 function viewMaestria(){
-  const cursadas=SUBJECTS.filter(s=>s.year<CURRENT.year||(s.year===CURRENT.year&&s.tri<=CURRENT.tri)).length;
-  let h=`<div class="mfacts"><div><b>2 años</b><span>6 trimestres, part-time, más el trabajo final</span></div><div><b>18 materias</b><span>${cursadas} cursadas o en curso</span></div><div><b>Lun · Mar · Jue</b><span>de 19 a 22 h, formato híbrido</span></div><div><b>Top 100</b><span>Departamento entre los 100 mejores del mundo, ranking QS</span></div></div>`;
-  h+=`<div class="mgrid">
-  <section class="mblock"><div class="lbl">Primer año</div><h3>Fundamentos teóricos, conceptuales y prácticos</h3><p>9 materias obligatorias.</p><ul class="mlist">${SUBJECTS.filter(s=>s.year===1).map(s=>`<li class="${notaOf(s.id)!=null?"ok":""}"><span>${esc(s.name)}</span><span>${TRIS[s.tri]}</span></li>`).join("")}</ul></section>
-  <section class="mblock"><div class="lbl">Segundo año</div><h3>Consolidación, profundización y especialización</h3><p>5 materias obligatorias y una orientación.</p><ul class="mlist">${PLAN.anio2.map(n=>`<li><span>${esc(n)}</span><span>Obligatoria</span></li>`).join("")}</ul>
-    ${PLAN.orient.map(o=>`<p style="margin-top:14px"><b>${esc(o.n)}.</b> ${esc(o.d)} ${o.m.map(esc).join(" + ")}.</p>`).join("")}</section>
-  <section class="mblock"><div class="lbl">Seminarios optativos</div><h3>Para especializarte</h3><ul class="mlist">${PLAN.optativas.map(n=>`<li><span>${esc(n)}</span></li>`).join("")}</ul>
+  const li=(n,sub,ok)=>`<li class="${ok?"ok":""}"><span>${esc(n)}</span>${sub?`<span>${esc(sub)}</span>`:""}</li>`;
+  let h=`<div class="mgrid">
+  <section class="mblock"><div class="lbl">Primer año</div><h3>Fundamentos teóricos, conceptuales y prácticos</h3><p>9 materias obligatorias.</p><ul class="mlist">${SUBJECTS.filter(s=>s.year===1).map(s=>li(s.name,TRIS[s.tri],notaOf(s.id)!=null)).join("")}</ul></section>
+  <section class="mblock"><div class="lbl">Segundo año</div><h3>Consolidación, profundización y especialización</h3><p>5 materias obligatorias y uno de los dos caminos.</p><ul class="mlist">${PLAN.anio2.map(n=>li(n,"Obligatoria")).join("")}</ul></section>
+  </div>
+  <div class="ysum" style="margin-top:34px"><h2>Dos caminos</h2></div>
+  <div class="mgrid">
+  <section class="mblock"><div class="lbl">Orientación profesional</div><h3>Trabajo final aplicado</h3><p>3 materias optativas + Taller de Trabajo Final.</p>
+    <ul class="mlist">${PLAN.optativas.map(n=>li(n,"Optativa")).join("")}</ul>
     <p style="margin-top:14px"><b>Proyecto Capstone.</b> Optativa de segundo año, en once reuniones. Combina sesiones prácticas sobre competencias transversales con profesionales del sector público, privado y la sociedad civil (incluidos graduados que trabajan en el BID, el Banco Mundial y la ONU) con un trabajo de consultoría.</p></section>
-  <section class="mblock"><div class="lbl">Intercambio</div><h3>Un semestre afuera</h3><p>Durante la segunda parte del segundo año. Los cupos son limitados y selectivos.</p><ul class="mlist">${PLAN.intercambio.map(([n,c])=>`<li><span>${esc(n)}</span><span>${esc(c)}</span></li>`).join("")}</ul></section>
-  <section class="mblock"><div class="lbl">Doctorado en Estudios Internacionales</div><h3>Si querés seguir</h3><p>Los graduados de la Maestría solo deben aprobar el bloque metodológico; quienes hicieron la orientación académica están exceptuados. Después se rinden dos exámenes comprensivos y se escribe y defiende una tesis con aporte original. Dura en promedio 5 años.</p></section>
-  <section class="mblock"><div class="lbl">Cuerpo docente full-time</div><h3>Profesores del Departamento</h3><ul class="mlist">${PLAN.fulltime.map(([n,c])=>`<li><span>${esc(n)}</span><span>${esc(c)}</span></li>`).join("")}</ul></section>
-  <section class="mblock"><div class="lbl">Recursos</div><h3>Para aprovechar</h3><ul class="mlist">
-    <li><span>Biblioteca Di Tella</span><span>Más de 240.000 libros y 115.000 revistas, bases de datos y archivos</span></li>
-    <li><span>Portal de empleos</span><span>Más de 1500 empresas e instituciones publican búsquedas</span></li>
-    <li><span>Bus ditelliano</span><span>Gratis, lunes a viernes de 7 a 22.25 h, conecta con subte D, tren Mitre y Metrobus Norte</span></li>
-    <li><span>Becas y ayuda financiera</span><span>Consultar en la Oficina de Admisiones</span></li></ul></section>
-  <section class="mblock"><div class="lbl">Contacto</div><h3>Admisiones de posgrado</h3><ul class="mlist">
-    <li><span>Correo</span><span>posgradosditella@utdt.edu</span></li>
-    <li><span>WhatsApp</span><span>(+54 911) 5571 9552</span></li>
-    <li><span>Teléfono</span><span>(+54 11) 5169 7231 / 7251</span></li>
-    <li><span>Campus</span><span>Av. Figueroa Alcorta 7350, Belgrano, CABA</span></li>
-    <li><span>Sitio</span><span><a href="https://www.utdt.edu/mei" target="_blank" rel="noopener">utdt.edu/mei</a></span></li>
-    <li><span>Acreditación</span><span>Resolución SPU N° 146/2023 · CONEAU Res. N° 31/2024</span></li></ul></section>
+  <section class="mblock"><div class="lbl">Orientación académica</div><h3>Tesis</h3><p>3 materias del bloque metodológico + Taller de Tesis.</p>
+    <ul class="mlist">${li("Bloque metodológico","3 materias")}${li("Taller de Tesis","Cierre")}</ul>
+    <p style="margin-top:14px">Quienes hacen este camino quedan exceptuados del bloque metodológico si después siguen el Doctorado en Estudios Internacionales.</p></section>
   </div>`;
   return h;
 }
