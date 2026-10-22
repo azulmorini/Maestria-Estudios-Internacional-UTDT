@@ -356,7 +356,6 @@ input,textarea{border-radius:0!important}
       <button id="tab-calendario" type="button" data-go="calendario">Calendario</button>
       <button id="tab-promedio" type="button" data-go="promedio">Promedio</button>
       <button id="tab-cuotas" type="button" data-go="cuotas">Cuotas</button>
-      <button id="tab-maestria" type="button" data-go="maestria">La maestría</button>
     </nav>
   </header>
   <div id="notice" class="notice" hidden></div>
@@ -944,7 +943,7 @@ function render(){
   pending=false;
   document.querySelectorAll("nav.tabs button").forEach(b=>b.setAttribute("aria-current",b.dataset.go===ui.view?"page":"false"));
   const y=scrollY;
-  $("#app").innerHTML= ui.view==="cuotas"?viewCuotas(): ui.view==="lecturas"?viewLecturas(): ui.view==="maestria"?viewMaestria(): ui.view==="calendario"?viewCalendario(): ui.view==="promedio"?viewPromedio(): ui.read?viewRead(): ui.subject?viewSubject(sub(ui.subject)):viewMaterias();
+  $("#app").innerHTML= ui.view==="cuotas"?viewCuotas(): ui.view==="lecturas"?viewLecturas(): ui.view==="calendario"?viewCalendario(): ui.view==="promedio"?viewPromedio(): ui.read?viewRead(): ui.subject?viewSubject(sub(ui.subject)):viewMaterias();
   scrollTo(0,y);
 }
 document.addEventListener("focusout",()=>setTimeout(()=>{if(pending)render()},0));
@@ -1001,7 +1000,7 @@ document.addEventListener("change",e=>{const b=e.target;if(b.dataset.act!=="leid
 const _r=render;render=function(){_r();persist()};
 /* inicio */
 (function init(){const h=(location.hash||"").slice(1);
-  if(h==="cuotas")ui.view="cuotas";else if(h==="calendario")ui.view="calendario";else if(h==="lecturas")ui.view="lecturas";else if(h==="maestria")ui.view="maestria";else if(h==="promedio")ui.view="promedio";else if(h.startsWith("m-")&&sub(h.slice(2))){ui.subject=h.slice(2)}
+  if(h==="cuotas")ui.view="cuotas";else if(h==="calendario")ui.view="calendario";else if(h==="lecturas")ui.view="lecturas";else if(h==="promedio")ui.view="promedio";else if(h.startsWith("m-")&&sub(h.slice(2))){ui.subject=h.slice(2)}
   else if(h.startsWith("r-")){const m=h.match(/^r-([A-Z0-9]+)-c(\d+)-(x?\d+)$/);if(m&&sub(m[1])){ui.subject=m[1];ui.read={s:m[1],i:+m[2]-1,k:m[3]}}}
   render();
 })();
