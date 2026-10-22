@@ -189,6 +189,16 @@ textarea.sm{min-height:60px}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:999px;font-size:13px;font-weight:600;z-index:20}
 
 
+/* avance */
+.prog{margin-top:24px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.prog .ph{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
+.prog .pct{font-family:var(--f-display);font-size:34px;line-height:1;font-variant-numeric:tabular-nums}
+.prog .pk{color:var(--muted);font-size:13px}
+.segs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;margin-top:12px}
+.seg{height:12px;border-radius:6px;background:var(--line);overflow:hidden}
+.seg i{display:block;height:100%;background:var(--accent)}
+.seglab{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;margin-top:5px;font-size:11px;color:var(--muted);text-align:center}
+.seglab .yr{font-weight:700}
 /* promedio */
 .avghero{margin-top:24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
 .avghero .big .n{font-family:var(--f-display);font-size:clamp(48px,8vw,72px);line-height:1;margin-top:8px;font-variant-numeric:tabular-nums}
@@ -218,8 +228,21 @@ textarea.sm{min-height:60px}
 .day.hoy .dn{color:var(--accent)}
 .ev{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:11.5px;line-height:1.25;padding:3px 6px;border-radius:5px;color:#1F1B2D;overflow:hidden;overflow-wrap:anywhere}
 .ev.dl{background:transparent!important;border:1.5px dashed var(--ink);color:var(--ink)}
+:root{--c-virt:#A9BFEE;--c-hib:#BFDAA6;--c-fer:#FFF27A;--c-exa:#E8897A;--c-evt:#E979E4}
+.ev.virt{background:var(--c-virt)}.ev.hib{background:var(--c-hib)}.ev.evt{background:var(--c-evt)}.ev.exa{background:var(--c-exa)}
+.ev{border-left:4px solid var(--sc,transparent)}
+.day.fer{background:color-mix(in srgb,var(--c-fer) 55%,var(--card))}
+.day.exa{background:color-mix(in srgb,var(--c-exa) 40%,var(--card))}
+.day .tag-d{font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#6B5A00}
+.day.exa .tag-d{color:#7A2416}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:12px;font-size:12.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:14px;height:14px;border-radius:4px;display:inline-block;border:1px solid #1F1B2D22}
+.dots i.virt{background:var(--c-virt)}.dots i.hib{background:var(--c-hib)}.dots i.evt{background:var(--c-evt)}.dots i.exa{background:var(--c-exa)}
+.warn{color:var(--bad);font-weight:600}
+.evcard .links{margin-top:6px;font-size:13px}.evcard .links a{color:var(--accent)}
 .dots{display:none;gap:3px;flex-wrap:wrap}
-.dots i{width:8px;height:8px;border-radius:50%;display:block;border:1px solid #1F1B2D33}
+.dots i{width:9px;height:9px;border-radius:50%;display:block;border:1px solid #1F1B2D33}
 .dots i.dl{background:transparent;border:1.5px dashed var(--ink)}
 @media (max-width:640px){.day{min-height:54px;padding:5px}.day .ev{display:none}.dots{display:flex}}
 .dayhead{margin-top:22px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
@@ -434,27 +457,27 @@ const SUBJECTS = [
    {d:"2026-08-31",tema:"Unidad 8. Colombia, soft balancing y militarización",t:["Moreno Mancera (2014). Relaciones cívico-militares en Colombia","Friedman y Long (2015). Soft balancing in the Americas"]}
   ]},
 
- {id:"EI12",faces:["cruz"],code:"EI12",short:"América del Sur",name:"Política y Economía Comparada de América del Sur",prof:"Facundo Cruz",year:1,tri:3,dia:"Jueves 19 a 22 h",evalua:"Presentación grupal 19 o 26 de noviembre (30%). Participación (10%). Ensayo individual de 15.000 a 20.000 caracteres, en .docx, hasta el 25 de enero de 2027 (60%).",color:"#E7A3C4",ill:"ballot",
+ {id:"EI12",aula:"A6",zoom:"https://utdt.zoom.us/j/95413747816",faces:["cruz"],code:"EI12",short:"América del Sur",name:"Política y Economía Comparada de América del Sur",prof:"Facundo Cruz",year:1,tri:3,dia:"Jueves 19 a 22 h",evalua:"Presentación grupal 19 o 26 de noviembre (30%). Participación (10%). Ensayo individual de 15.000 a 20.000 caracteres, en .docx, hasta el 25 de enero de 2027 (60%).",color:"#E7A3C4",ill:"ballot",
   nota:"La clase 7 figura en el programa como 29 de noviembre; por la secuencia corresponde al 29 de octubre.",
   classes:[
    {d:"2026-09-17",tema:"Introducción y presentación de la materia",mod:"Híbrida",t:["D:Notas de discusión: balances electorales 2021-2022, mapa político, partidos"]},
    {d:"2026-09-24",tema:"Presidentes, presidencia y poder legislativo",mod:"Híbrida",t:["Mainwaring y Shugart (2002). Presidencialismo y democracia en América Latina","Llanos y Nolte. Los Congresos en América Latina: legislaturas reactivas, potencialmente activas","D:Llanos y Nolte. The many faces of Latin American presidentialism"]},
-   {d:"2026-10-01",tema:"La inestabilidad, ¿constante o excepción regional?",mod:"Híbrida",t:["Cruz y Pérez Alfaro. ¿Dónde y cómo estamos después del 2001?","D:Murillo (2021). Protestas, descontento y democracia en América Latina"]},
-   {d:"2026-10-08",tema:"Outsiders, partidos antiestablishment y nuevos actores",mod:"Virtual",t:["Dietz y Myers (2002). El colapso de sistemas de partidos: Perú y Venezuela","Torre (2003). Los huérfanos de la política de partidos","D:Schedler (1996). Los partidos antiestablishment político","D:Torre (2017). Los huérfanos de la política de partidos revisited"]},
+   {d:"2026-10-01",tema:"La inestabilidad, ¿constante o excepción regional?",mod:"Virtual",t:["Cruz y Pérez Alfaro. ¿Dónde y cómo estamos después del 2001?","D:Murillo (2021). Protestas, descontento y democracia en América Latina"]},
+   {d:"2026-10-08",tema:"Outsiders, partidos antiestablishment y nuevos actores",mod:"Híbrida",t:["Dietz y Myers (2002). El colapso de sistemas de partidos: Perú y Venezuela","Torre (2003). Los huérfanos de la política de partidos","D:Schedler (1996). Los partidos antiestablishment político","D:Torre (2017). Los huérfanos de la política de partidos revisited"]},
    {d:"2026-10-15",tema:"Apoyo social y opinión pública presidencial",mod:"Híbrida",t:["Barbieri, Cachés y Reina (2021). Subirse a la montaña rusa","Astarita, Barbieri, Cruz y Reina (2024). El poder en decadencia","D:Pulsar UBA (2024). Una corta luna de miel","D:Pulsar UBA (2025). ¿Quién lidera en tiempos de crisis global?"]},
    {d:"2026-10-22",tema:"Creencias sobre la democracia, las elecciones y el sistema internacional",mod:"Virtual",t:["Pulsar UBA (2024). Creencias Sociales, informe 1: Democracia y consensos","Pulsar UBA (2025). Creencias Sociales, informe 2: La democracia y el poder presidencial","Pulsar UBA (2025). Creencias Sociales, informe 3: Los argentinos frente a las elecciones","D:Pulsar UBA (2024). Creencias Sociales, informe 4: Argentina y el mundo"]},
-   {d:"2026-10-29",tema:"Nuevos patrones de inestabilidad institucional",mod:"Híbrida",t:["Pérez-Liñán (2009). Juicio político al presidente, caps. I, III y VIII","D:El fin de la derecha vergonzosa y el ascenso de la nueva derecha en Brasil"]},
-   {d:"2026-11-05",tema:"Sistemas de partidos tras las crisis: reforma y realineamiento",mod:"Virtual",t:["Roberts (2013). Reforma de mercado, (des)alineamiento programático y estabilidad","Burgess y Levitsky (2003). Explaining Populist Party Adaptation in Latin America","D:Murillo, Oliveros y Vaishnav (2010). Electoral revolution or democratic alternation?"]},
-   {d:"2026-11-12",tema:"Gabinetes y coaliciones contra la inestabilidad",mod:"Virtual",t:["Martínez-Gallardo y Schleiter (2015). Choosing Whom to Trust","Clerici, Albala y Reniú. Conclusion, en Coalition Politics and Federalism","D:Latin American presidents and their oversized government coalitions"]},
+   {d:"2026-10-29",tema:"Nuevos patrones de inestabilidad institucional",mod:"Virtual",t:["Pérez-Liñán (2009). Juicio político al presidente, caps. I, III y VIII","D:El fin de la derecha vergonzosa y el ascenso de la nueva derecha en Brasil"]},
+   {d:"2026-11-05",tema:"Sistemas de partidos tras las crisis: reforma y realineamiento",mod:"Híbrida",t:["Roberts (2013). Reforma de mercado, (des)alineamiento programático y estabilidad","Burgess y Levitsky (2003). Explaining Populist Party Adaptation in Latin America","D:Murillo, Oliveros y Vaishnav (2010). Electoral revolution or democratic alternation?"]},
+   {d:"2026-11-12",tema:"Gabinetes y coaliciones contra la inestabilidad",mod:"Híbrida",t:["Martínez-Gallardo y Schleiter (2015). Choosing Whom to Trust","Clerici, Albala y Reniú. Conclusion, en Coalition Politics and Federalism","D:Latin American presidents and their oversized government coalitions"]},
    {d:"2026-11-19",tema:"Presentaciones orales grupales",mod:"Híbrida"},
    {d:"2026-11-26",tema:"Presentaciones orales grupales",mod:"Híbrida"}
   ]},
- {id:"EI27",faces:["malacalza"],code:"EI27",short:"Cooperación Internacional",name:"Teoría y Práctica de la Cooperación Internacional",prof:"Bernabé Malacalza",year:1,tri:3,dia:"Martes 19 a 22 h",evalua:"Participación y ejercicios prácticos (30%). Proyecto de cooperación propio, entrega hasta el 11 de diciembre (70%).",color:"#8FD8CF",ill:"sprout",
+ {id:"EI27",aula:"A5",zoom:"https://utdt.zoom.us/j/5144960713?omn=94804277657",faces:["malacalza"],code:"EI27",short:"Cooperación Internacional",name:"Teoría y Práctica de la Cooperación Internacional",prof:"Bernabé Malacalza",year:1,tri:3,dia:"Martes 19 a 22 h",evalua:"Participación y ejercicios prácticos (30%). Proyecto de cooperación propio, entrega hasta el 11 de diciembre (70%).",color:"#8FD8CF",ill:"sprout",
   classes:[
    {d:"2026-09-15",tema:"¿Qué es la cooperación internacional? ¿Por qué cooperan los Estados?",mod:"Virtual",t:["Morgenthau (2015 [1962]). Una teoría política sobre la ayuda exterior","Malacalza (2020). Cooperación al desarrollo y relaciones internacionales: un campo en debate"]},
    {d:"2026-09-22",tema:"Medición del desarrollo y graduación de la ayuda",mod:"Híbrida",t:["Tezanos Vázquez (2018). Geografía del desarrollo en América Latina y el Caribe","Ziai (2025). Theorizing Postdevelopment"]},
    {d:"2026-09-29",tema:"¿Existe un régimen de cooperación? Orígenes del sistema de ayuda. Ejercicio práctico I",mod:"Virtual",t:["Sanahuja (1999). La ayuda externa como instrumento de la contención (1947-1960)","Klingebiel (2014). The future of the ODA concept"]},
-   {d:"2026-10-06",tema:"Diplomacia económica, plataformas de financiamiento y bancos de desarrollo",mod:"Híbrida",t:["Albright (2025). Determinants of Chinese Development Finance in Latin America","Okano-Heijmans (2011). Conceptualizing Economic Diplomacy"]},
+   {d:"2026-10-06",tema:"Diplomacia económica, plataformas de financiamiento y bancos de desarrollo",mod:"Virtual (cambia por el partido en River)",t:["Albright (2025). Determinants of Chinese Development Finance in Latin America","Okano-Heijmans (2011). Conceptualizing Economic Diplomacy"]},
    {d:"2026-10-13",tema:"Cooperación Sur-Sur y alternativas de reforma",mod:"Virtual",t:["Domínguez (2019). La constelación del Sur, cap. 1","UN Secretary-General (2024). Report on the State of South-South Cooperation"]},
    {d:"2026-10-20",tema:"Crisis climática: transición justa vs. transformación socioecológica",mod:"Híbrida",t:["OECD (2024). Development Co-operation Report 2024, pp. 316-332","Lang, Bringel y Manahan (2024). Lucrative transitions, green colonialism"]},
    {d:"2026-10-27",tema:"Cooperación triangular, actores no estatales y alianzas multiactor",mod:"Híbrida",t:["Pérez-Pineda y Wehrmann (2021). Partnerships with the private sector","Ayllón Pino (2020). Las OSC como agentes de Cooperación Sur-Sur"]},
@@ -463,7 +486,7 @@ const SUBJECTS = [
    {d:"2026-11-17",tema:"Poder algorítmico y cooperación en ciencia y tecnología",mod:"Híbrida",t:["Regilme (2024). Artificial Intelligence Colonialism"]},
    {d:"2026-11-24",tema:"Cooperación en tiempos de guerra y construcción de paz",mod:"Híbrida",t:["Sogge (2008). La debilidad del Estado: mirar a través de otros cristales"]}
   ]},
- {id:"EI42",faces:["porretti"],code:"EI42",short:"Gobernanza Global",name:"Gobernanza Global y Organismos Internacionales",prof:"Eduardo Porretti",year:1,tri:3,dia:"Lunes 19 a 22 h",evalua:"Trabajo final de unos 10.000 caracteres, entrega del 1 al 7 de diciembre (85%). Participación (15%). Declarar el uso de IA al pie.",color:"#CBC3DD",ill:"flags",
+ {id:"EI42",aula:"A114",zoomTxt:"ID de reunión 934 6979 7697 · código 830141",faces:["porretti"],code:"EI42",short:"Gobernanza Global",name:"Gobernanza Global y Organismos Internacionales",prof:"Eduardo Porretti",year:1,tri:3,dia:"Lunes 19 a 22 h",evalua:"Trabajo final de unos 10.000 caracteres, entrega del 1 al 7 de diciembre (85%). Participación (15%). Declarar el uso de IA al pie.",color:"#CBC3DD",ill:"flags",
   classes:[
    {d:"2026-09-14",tema:"Evolución de la sociedad internacional contemporánea",mod:"Virtual",t:["Götz Betancourt (2013). La evolución de la sociedad internacional entre los siglos XX y XXI","Zamudio González (2013). Organizaciones internacionales: ¿instrumentos o actores?"]},
    {d:"2026-09-21",tema:"Genealogía de los organismos internacionales",mod:"Virtual",t:["Naciones Unidas. Órganos principales","Weiss, Forsythe y Coate (2001). The United Nations and changing world politics, intro","Idiart (2026). La carrera por liderar la ONU entra en terreno desconocido","Dupraz-Dobias (2026). Race for UN's top job enters final, murkiest stretch"]},
@@ -488,6 +511,26 @@ const DEADLINES = [
  {d:"2026-12-11",txt:"Proyecto de cooperación, hasta el 11 de diciembre",id:"EI27"},
  {d:"2027-01-25",txt:"Ensayo individual, hasta el 25 de enero",id:"EI12"}
 ];
+const CRONO = [
+ {d:"2026-10-09",tipo:"evento",txt:"Evento social"},
+ {d:"2026-10-12",tipo:"feriado",txt:"Feriado"},
+ {d:"2026-11-09",tipo:"feriado",txt:"Feriado"},
+ {d:"2026-11-10",tipo:"feriado",txt:"Feriado"},
+ {d:"2026-11-20",tipo:"evento",txt:"Presentación Track Académico MEI · Clerici y Peña"},
+ {d:"2026-11-23",tipo:"feriado",txt:"Feriado"},
+ {d:"2026-11-25",tipo:"evento",txt:"Evento social"},
+ {d:"2026-11-26",tipo:"examen",txt:"Recuperación o exámenes"},
+ {d:"2026-12-01",tipo:"examen",txt:"Semana de recuperación y exámenes"},
+ {d:"2026-12-02",tipo:"examen",txt:"Semana de recuperación y exámenes"},
+ {d:"2026-12-03",tipo:"hibrida",txt:"Encuentro híbrido en el aula A114"},
+ {d:"2026-12-04",tipo:"examen",txt:"Semana de recuperación y exámenes"},
+ {d:"2026-12-07",tipo:"feriado",txt:"Feriado"},
+ {d:"2026-12-08",tipo:"feriado",txt:"Feriado"},
+ {d:"2026-12-09",tipo:"examen",txt:"Semana de recuperación y exámenes"},
+ {d:"2026-12-10",tipo:"examen",txt:"Semana de recuperación y exámenes"},
+ {d:"2026-12-11",tipo:"examen",txt:"Semana de recuperación y exámenes"}
+];
+const CRONO_NOTA="Gobernanza Global tendrá una clase a recuperar; la fecha se informa después del comienzo de clases.";
 const PAY = {id:"197692",portal:"https://www.utdt.edu/pagos",mail:"facturacion@utdt.edu",ultimo:366885,first:"2026-03",last:"2027-12"};
 
 /* ============ Estado y datos guardados ============ */
@@ -546,7 +589,7 @@ function card(s){const p=progress(s),pct=p.tot?Math.round(p.leidos/p.tot*100):0;
   </button>`}
 function viewMaterias(){
   const t=today(),nx=nextClasses();
-  let h="";
+  let h=progressHTML();
   YEARS.forEach(y=>{
     h+=`<details class="year" open id="year-${y.n}"><summary><span class="chev">▶</span><h2>${y.label}</h2><span class="lbl">${y.anio}</span></summary>`;
     [1,2,3].forEach(tr=>{const list=SUBJECTS.filter(s=>s.year===y.n&&s.tri===tr);const cur=CURRENT.year===y.n&&CURRENT.tri===tr;
@@ -641,6 +684,19 @@ function editorHTML(k){const p=store.pagos[k]||{},paid=p.estado==="pagado";
 
 
 
+
+/* avance de carrera */
+const TRI_DATES={1:["03-01","05-31"],2:["06-01","09-12"],3:["09-13","12-11"]};
+function careerProgress(){const t=today(),segs=[];
+  YEARS.forEach(y=>[1,2,3].forEach(tr=>{const a=pd(`${y.anio}-${TRI_DATES[tr][0]}`),b=pd(`${y.anio}-${TRI_DATES[tr][1]}`);
+    const f=t<a?0:t>b?1:(t-a)/(b-a);segs.push({y,tr,f})}));
+  const pct=Math.round(segs.reduce((x,s)=>x+s.f,0)/segs.length*100),done=segs.filter(s=>s.f>=1).length;
+  const cur=segs.find(s=>s.f>0&&s.f<1);return{segs,pct,done,cur}}
+function progressHTML(){const p=careerProgress(),apr=SUBJECTS.filter(s=>notaOf(s.id)!=null).length;
+  return `<section class="prog" aria-label="Avance de la carrera"><div class="ph"><span class="lbl">Avance de la carrera</span><span class="pct">${p.pct}%</span>
+    <span class="pk">${p.done} de 6 trimestres terminados${p.cur?` · cursando el ${TRIS[p.cur.tr].toLowerCase()} del ${p.cur.y.label.toLowerCase()}`:""} · ${apr} materia${apr===1?"":"s"} con nota</span></div>
+    <div class="segs" role="progressbar" aria-valuenow="${p.pct}" aria-valuemin="0" aria-valuemax="100">${p.segs.map(s=>`<div class="seg" title="${s.y.label} · ${TRIS[s.tr]}"><i style="width:${Math.round(s.f*100)}%"></i></div>`).join("")}</div>
+    <div class="seglab">${p.segs.map(s=>`<span class="${s.tr===1?"yr":""}">T${s.tr} ${s.y.anio}</span>`).join("")}</div></section>`}
 /* promedio */
 const fmtN=n=>n.toLocaleString("es-AR",{maximumFractionDigits:2});
 const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
@@ -666,14 +722,21 @@ const cap=x=>x[0].toUpperCase()+x.slice(1);
 function calEvents(){const ev=[];
   SUBJECTS.forEach(s=>s.classes.forEach((c,i)=>{if(c.d)ev.push({d:c.d,type:"cls",s,i,c})}));
   DEADLINES.forEach(x=>{const s=sub(x.id);ev.push({d:x.d,type:"dl",s,txt:x.txt})});
+  CRONO.filter(x=>x.tipo==="evento"||x.tipo==="hibrida").forEach(x=>ev.push({d:x.d,type:x.tipo==="evento"?"evt":"hib",s:x.id?sub(x.id):null,txt:x.txt}));
   return ev.sort((a,b)=>a.d<b.d?-1:a.d>b.d?1:(a.type==="dl")-(b.type==="dl"))}
 const mKey=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
-function evLabel(e){return e.type==="dl"?`Entrega · ${e.s?e.s.short:""}`:`Clase ${e.i+1} · ${e.s.short}`}
+const modCls=m=>/virtual/i.test(m||"")?"virt":/h[ií]brida/i.test(m||"")?"hib":"";
+const dayInfo=ds=>CRONO.find(x=>x.d===ds&&(x.tipo==="feriado"||x.tipo==="examen"));
+function evCls(e){return e.type==="dl"?"dl":e.type==="evt"?"evt":e.type==="hib"?"hib":modCls(e.c.mod)}
+function evLabel(e){return e.type==="dl"?`Entrega · ${e.s?e.s.short:""}`:e.type==="evt"||e.type==="hib"?e.txt:`Clase ${e.i+1} · ${e.s.short}`}
 function evCard(e){const col=e.s?e.s.color:"var(--line)";
+  if(e.type==="evt"||e.type==="hib")return `<div class="evcard" style="cursor:default"><span class="sw" style="background:var(${e.type==="evt"?"--c-evt":"--c-hib"})"></span><span style="min-width:0"><span class="when">${e.type==="evt"?"Evento":"Híbrida"} · ${fmtD(e.d)}</span><h4>${esc(e.txt)}</h4></span></div>`;
   if(e.type==="dl")return `<button class="evcard" type="button" data-sub="${e.s?e.s.id:""}"><span class="sw" style="background:transparent;border:1.5px dashed var(--ink)"></span><span style="min-width:0"><span class="when">Entrega · ${fmtD(e.d)}</span><h4>${esc(e.txt)}</h4><span class="sub">${esc(e.s?e.s.name:"")}</span></span></button>`;
-  const lec=(e.c.t||[]).map(t=>t.replace(/^D:/,""));
-  return `<button class="evcard" type="button" data-sub="${e.s.id}" data-cls="${e.i}"><span class="sw" style="background:${col}"></span><span style="min-width:0">
+  const lec=(e.c.t||[]).map(t=>t.replace(/^D:/,"")),mc=modCls(e.c.mod),di=dayInfo(e.d);
+  const links=mc==="hib"&&e.s.aula?`Aula ${esc(e.s.aula)}`:mc==="virt"?(e.s.zoom?`<a href="${e.s.zoom}" target="_blank" rel="noopener">Entrar al Zoom</a>`:e.s.zoomTxt?`Zoom: ${esc(e.s.zoomTxt)}`:""):"";
+  return `<button class="evcard" type="button" data-sub="${e.s.id}" data-cls="${e.i}"><span class="sw" style="background:${mc?`var(--c-${mc==="virt"?"virt":"hib"})`:col}"></span><span style="min-width:0">
     <span class="when">${fmtD(e.d)} · Clase ${e.i+1}${e.c.mod?" · "+esc(e.c.mod):""}</span><h4>${esc(e.c.tema)}</h4><span class="sub">${esc(e.s.name)} · ${esc(e.s.prof)}</span>
+    ${links?`<div class="links">${links}</div>`:""}${di?`<div class="links warn">El cronograma marca ${di.tipo==="feriado"?"feriado":"semana de recuperación"} este día: confirmá si la clase se mantiene.</div>`:""}
     ${lec.length?`<ul>${lec.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>`:""}</span></button>`}
 function viewCalendario(){
   const t=today(),all=calEvents();
@@ -684,13 +747,15 @@ function viewCalendario(){
   h+=`<div class="cal" role="grid" aria-label="Calendario de ${MES[m-1]} ${y}">`+["lun","mar","mié","jue","vie","sáb","dom"].map(d=>`<div class="dow">${d}</div>`).join("");
   const cells=Math.ceil((off+dim)/7)*7;
   for(let k=0;k<cells;k++){const d=new Date(y,m-1,1-off+k),ds=iso(d),out=d.getMonth()!==m-1,evs=by[ds]||[];
-    h+=`<button class="day ${out?"out":""} ${ds===iso(t)?"hoy":""}" type="button" data-act="calday" data-day="${ds}" aria-pressed="${ui.calDay===ds}" aria-label="${d.getDate()} de ${MES[d.getMonth()]}${evs.length?`, ${evs.length} evento${evs.length>1?"s":""}`:""}">
-      <span class="dn">${d.getDate()}</span>${evs.map(e=>`<span class="ev ${e.type==="dl"?"dl":""}" style="background:${e.s?e.s.color:"var(--line)"}">${esc(evLabel(e))}</span>`).join("")}
-      <span class="dots">${evs.map(e=>`<i class="${e.type==="dl"?"dl":""}" style="${e.type==="dl"?"":"background:"+e.s.color}"></i>`).join("")}</span></button>`}
-  h+=`</div>`;
+    const di=dayInfo(ds);
+    h+=`<button class="day ${out?"out":""} ${ds===iso(t)?"hoy":""} ${di?(di.tipo==="feriado"?"fer":"exa"):""}" type="button" data-act="calday" data-day="${ds}" aria-pressed="${ui.calDay===ds}" aria-label="${d.getDate()} de ${MES[d.getMonth()]}${evs.length?`, ${evs.length} evento${evs.length>1?"s":""}`:""}">
+      <span class="dn">${d.getDate()}</span>${di?`<span class="tag-d">${di.tipo==="feriado"?"Feriado":"Recup. / exámenes"}</span>`:""}${evs.map(e=>`<span class="ev ${evCls(e)}" style="--sc:${e.s&&e.type==="cls"?e.s.color:"transparent"}">${esc(evLabel(e))}</span>`).join("")}
+      <span class="dots">${evs.map(e=>`<i class="${evCls(e)}"></i>`).join("")}</span></button>`}
+  h+=`</div><div class="legend"><span><i style="background:var(--c-virt)"></i>Virtual</span><span><i style="background:var(--c-hib)"></i>Híbrida</span><span><i style="background:var(--c-evt)"></i>Evento</span><span><i style="background:var(--c-fer)"></i>Feriado</span><span><i style="background:var(--c-exa)"></i>Recuperación o exámenes</span><span><i style="border:1.5px dashed var(--ink);background:transparent"></i>Entrega</span></div>`;
+  if(ui.calMonth>="2026-09"&&ui.calMonth<="2026-12")h+=`<p class="note">${esc(CRONO_NOTA)}</p>`;
   if(ui.calDay&&ui.calDay.startsWith(ui.calMonth)){const evs=by[ui.calDay]||[],d=pd(ui.calDay);
     h+=`<div class="dayhead"><h3>${cap(DIA[d.getDay()])} ${d.getDate()} de ${MES[d.getMonth()]}</h3><button class="btn link" type="button" data-act="caldayclose">Ver todo el mes</button></div>
-      <div class="evlist">${evs.length?evs.map(evCard).join(""):'<div class="empty">No hay clases ni entregas este día.</div>'}</div>`}
+      <div class="evlist">${dayInfo(ui.calDay)?`<div class="empty">${esc(dayInfo(ui.calDay).txt)}</div>`:""}${evs.length?evs.map(evCard).join(""):dayInfo(ui.calDay)?"":'<div class="empty">No hay clases ni entregas este día.</div>'}</div>`}
   else{const evs=all.filter(e=>e.d.startsWith(ui.calMonth));
     h+=`<div class="dayhead"><h3>Clases y entregas de ${MES[m-1]}</h3><span class="lbl">${evs.length} en total</span></div>
       <div class="evlist">${evs.length?evs.map(evCard).join(""):'<div class="empty">No hay clases ni entregas con fecha en este mes.</div>'}</div>`}
