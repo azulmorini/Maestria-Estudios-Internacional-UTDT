@@ -247,6 +247,8 @@ function sunRays(){let s='';for(let i=0;i<16;i++){const a=i*Math.PI/8,c=Math.cos
   else{const px=-n,py=c,p=(r,o)=>`${(60+c*r+px*o).toFixed(1)} ${(60+n*r+py*o).toFixed(1)}`;
   s+=`<path d="M${p(28,0)} Q${p(33,4)} ${p(37,0)} T${p(46,0)}"/>`}}return s}
 const ILLU = {
+  coin:`<svg viewBox="0 0 120 120" ${S}><circle cx="60" cy="60" r="44"/><circle cx="60" cy="60" r="34"/><path d="M70 46 C66 40 50 40 50 50 C50 60 70 58 70 69 C70 79 53 80 48 73"/><path d="M60 34 V86"/></svg>`,
+  swords:`<svg viewBox="0 0 120 120" ${S}><path d="M18 18 L76 76 M102 18 L44 76"/><path d="M62 88 L88 62 M32 62 L58 88"/><path d="M78 78 L92 92 M42 78 L28 92"/><circle cx="97" cy="97" r="5"/><circle cx="23" cy="97" r="5"/></svg>`,
   book:`<svg viewBox="0 0 120 120" ${S}><path d="M60 40 C48 32 30 32 18 36 V90 C30 86 48 86 60 94 Z"/><path d="M60 40 C72 32 90 32 102 36 V90 C90 86 72 86 60 94 Z"/><path d="M26 48 C36 45 46 46 52 49 M26 58 C36 55 46 56 52 59 M26 68 C36 65 46 66 52 69 M68 49 C74 46 84 45 94 48 M68 59 C74 56 84 55 94 58"/><path d="M76 66 l6 -6 l6 6 l-6 6 z"/><path d="M60 22 l3 7 l7 1 l-5 5 l1 7 l-6 -3 l-6 3 l1 -7 l-5 -5 l7 -1 z"/></svg>`,
   scale:`<svg viewBox="0 0 120 120" ${S}><path d="M60 20 V96 M44 98 H76 M60 20 l-3 -4 h6 z"/><path d="M24 34 H96"/><path d="M24 34 L14 64 M24 34 L34 64 M96 34 L86 60 M96 34 L106 60"/><path d="M10 64 Q24 76 38 64 Z"/><path d="M82 60 Q96 72 110 60 Z"/><rect x="16" y="52" width="10" height="10"/><rect x="24" y="46" width="10" height="16"/><ellipse cx="96" cy="56" rx="7" ry="2.5"/><ellipse cx="96" cy="51" rx="7" ry="2.5"/></svg>`,
   paper:`<svg viewBox="0 0 120 120" ${S}><path d="M22 26 H90 V96 H30 a8 8 0 0 1 -8 -8 Z"/><path d="M90 40 H100 V88 a8 8 0 0 1 -8 8"/><path d="M32 38 H80" stroke-width="5"/><rect x="32" y="50" width="22" height="20"/><path d="M32 50 L54 70 M54 50 L32 70"/><path d="M62 52 H80 M62 60 H80 M62 68 H80 M32 78 H80 M32 86 H70"/></svg>`,
@@ -352,7 +354,7 @@ const SUBJECTS = [
    {d:"2026-05-11",tema:"Perspectiva decolonial y feminismos",mod:"Híbrida · Cuadro",t:["Adlbi Sibai (2016). La cárcel del feminismo, cap. 1: Descolonizando la cuestión","Fonseca y Jerrems (2018). Decolonizar las Relaciones Internacionales"]},
    {d:"2026-05-18",tema:"Teorías latinoamericanas. Entrega de consignas del final",mod:"Híbrida · Cuadro",t:["Escudé (1995). El Realismo de los Estados Débiles, pp. 47-78","Briceño-Ruiz y Simonoff (2017). La Escuela de la Autonomía"]}
   ]},
- {id:"EI03",faces:["bertoni"],code:"EI03",short:"Comercio Internacional",name:"El Sistema Internacional de Comercio",prof:"Ramiro L. Bertoni",year:1,tri:1,dia:"Martes 19 a 22 h",evalua:"Examen domiciliario con preguntas orientativas.",color:"#EED27A",ill:"scale",
+ {id:"EI03",faces:["bertoni"],code:"EI03",short:"Comercio Internacional",name:"El Sistema Internacional de Comercio",prof:"Ramiro L. Bertoni",year:1,tri:1,dia:"Martes 19 a 22 h",evalua:"Examen domiciliario con preguntas orientativas.",color:"#EED27A",ill:"coin",
   nota:"El programa no fecha las clases; están en el orden de los módulos.",
   classes:[
    {d:"2026-03-03",tema:"Interdependencia, historia del capitalismo y globalización",t:["Chang (2014). ¿Cómo llegamos hasta aquí? Una breve historia del capitalismo, cap. 3","Gilpin (2001). The New Global Economic Order, cap. 1","Zelicovich, Zanetto y Schapiro (2024). La reconfiguración de la globalización"]},
@@ -400,7 +402,7 @@ const SUBJECTS = [
    {tema:"América Latina y el mundo",t:["Navegar la incertidumbre: miradas latinoamericanas sobre Europa y el mundo (AmLat Radar)","Sigmon (2025). La política exterior de Trump 2.0 en las Américas"]},
    {tema:"Balance y análisis de coyuntura",t:[]}
   ]},
- {id:"EI23",faces:["battaglino"],code:"EI23",short:"Guerra y Violencia",name:"Guerra y Violencia en el Sistema Mundial",prof:"Jorge Battaglino",year:1,tri:2,dia:"Lunes 19 a 22 h",evalua:"Examen domiciliario (90%). Presencia y participación (10%).",color:"#F49A92",ill:"rook",
+ {id:"EI23",faces:["battaglino"],code:"EI23",short:"Guerra y Violencia",name:"Guerra y Violencia en el Sistema Mundial",prof:"Jorge Battaglino",year:1,tri:2,dia:"Lunes 19 a 22 h",evalua:"Examen domiciliario (90%). Presencia y participación (10%).",color:"#F49A92",ill:"swords",
   classes:[
    {d:"2026-06-08",tema:"Presentación del curso"},
    {d:"2026-06-15",tema:"Unidad 1. Estudios de seguridad y niveles de análisis",t:["Horowitz y Fuhrmann (2018). Studying Leaders and Military Conflict","Mead (2000). Warfare is Only an Invention, Not a Biological Necessity"]},
