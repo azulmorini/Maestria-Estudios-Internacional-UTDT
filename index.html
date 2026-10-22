@@ -228,6 +228,12 @@ textarea.sm{min-height:60px}
 .pcard{border-top:1px solid var(--ink);padding:10px 0;min-width:0}
 .pcard .short{font-family:var(--f-display);font-size:22px;line-height:1.1;color:var(--ink)}
 .pcard .code{font-size:10px;letter-spacing:.18em;font-weight:600;text-transform:uppercase;color:var(--muted)}
+/* pdf */
+.clip{vertical-align:-2px;flex:none}
+a.tag.pdf{text-decoration:none;display:inline-flex;align-items:center;gap:4px}
+.clipbtn{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.lacts{display:inline-flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+@media(max-width:600px){.lread li{grid-template-columns:auto minmax(0,1fr);row-gap:6px}.lacts{grid-column:2;justify-content:flex-start}}
 /* lecturas */
 .wk{margin-top:30px}
 .wk>.ysum h2{font-size:clamp(34px,5vw,56px)}
@@ -361,6 +367,7 @@ input,textarea{border-radius:0!important}
   <div id="notice" class="notice" hidden></div>
   <main id="app"></main>
 </div>
+<input type="file" id="pdfin" accept="application/pdf,.pdf" hidden>
 <div id="toast" class="toast" hidden></div>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="duo" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".33 .33 .33 0 0  .33 .33 .33 0 0  .33 .33 .33 0 0  0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".60 .72 .95"/><feFuncG type="table" tableValues=".13 .24 .90"/><feFuncB type="table" tableValues=".08 .17 .84"/></feComponentTransfer></filter></svg>
 
@@ -653,6 +660,14 @@ const clsKey=(sid,i)=>`${sid}-c${i+1}`;
 function txtList(s,i){const c=s.classes[i];const base=(c.t||[]).map((t,k)=>({k:String(k),raw:t,disc:t.startsWith("D:"),title:t.replace(/^D:/,""),extra:false}));
   const doc=store.clases[clsKey(s.id,i)]||{};const ex=(doc.extras||[]).map((e,k)=>({k:"x"+k,title:e.titulo,extra:true,idx:k}));return base.concat(ex)}
 function noteOf(s,i,t){const doc=store.clases[clsKey(s.id,i)]||{};if(t.extra)return (doc.extras||[])[t.idx]||{};return (doc.textos||{})[t.k]||{}}
+const CLIP='<svg class="clip" viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path d="M21 11.5l-8.6 8.6a5.5 5.5 0 0 1-7.8-7.8l8.9-8.9a3.7 3.7 0 0 1 5.2 5.2l-8.9 8.9a1.8 1.8 0 0 1-2.6-2.6l8.2-8.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+let assets=null;
+const pdfUrl=pf=>pf&&(pf.url||("/_blob/"+pf.id));
+function pdfLink(n,label){return n.pdf?`<a class="tag pdf" href="${esc(pdfUrl(n.pdf))}" target="_blank" rel="noopener" title="${esc(n.pdf.name||"PDF")}">${CLIP} ${label||"PDF original"}</a>`:""}
+function pdfRow(n,ctx){
+  if(n.pdf)return `<div class="row">${pdfLink(n,"Abrir PDF original")}${assets?`<button class="btn link" type="button" data-act="delpdf" ${ctx}>Quitar PDF</button>`:""}</div>`;
+  return assets?`<div class="row"><button class="btn ghost clipbtn" type="button" data-act="attach" ${ctx}>${CLIP} Adjuntar PDF original</button></div>`:"";
+}
 function progress(s){let tot=0,leidos=0,res=0;s.classes.forEach((c,i)=>txtList(s,i).forEach(t=>{tot++;const n=noteOf(s,i,t);if(n.leido)leidos++;if(n.resumen)res++}));return{tot,leidos,res}}
 
 function toast(m){const t=$("#toast");t.textContent=m;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(()=>t.hidden=true,2200)}
@@ -717,9 +732,10 @@ function viewSubject(s){
     if(!list.length)h+=`<div class="note" style="margin:0">Sin lecturas asignadas en el programa.</div>`;
     list.forEach(tx=>{const n=noteOf(s,i,tx),tk=key+"-"+tx.k,ctx=`data-s="${s.id}" data-i="${i}" data-k="${tx.k}"`;
       h+=`<details class="txt" data-tk="${tk}" ${ui.openTxt.has(tk)?"open":""}><summary><span class="dot ${n.leido?"on":""}"></span><span class="ttl">${esc(tx.title)}
-        <div class="tags">${tx.disc?'<span class="tag ac">Discusión</span>':""}${tx.extra?'<span class="tag">Agregado</span>':""}${n.resumen?`<button class="tag ok readlink" type="button" data-act="read" ${ctx}>Leer resumen →</button>`:""}${(n.ejercicios||[]).length?`<span class="tag ok">${n.ejercicios.length} ejercicio${n.ejercicios.length>1?"s":""}</span>`:""}</div></span></summary>
+        <div class="tags">${tx.disc?'<span class="tag ac">Discusión</span>':""}${tx.extra?'<span class="tag">Agregado</span>':""}${n.resumen?`<button class="tag ok readlink" type="button" data-act="read" ${ctx}>Leer resumen →</button>`:""}${pdfLink(n,"PDF")}${(n.ejercicios||[]).length?`<span class="tag ok">${n.ejercicios.length} ejercicio${n.ejercicios.length>1?"s":""}</span>`:""}</div></span></summary>
         <div class="txt-body">
           <label class="chk"><input type="checkbox" id="lei-${tk}" data-act="leido" ${ctx} ${n.leido?"checked":""}> Leído</label>
+          <div class="sect"><div class="lbl">Texto original</div>${pdfRow(n,ctx)||'<div class="note" style="margin:0">Sin PDF adjunto.</div>'}</div>
           <div class="sect"><div class="lbl">Resumen</div>
            ${ui.adding===("res-"+tk)||!n.resumen?`<textarea id="res-${tk}" placeholder="Ideas centrales, argumento, conceptos clave…">${esc(n.resumen||"")}</textarea><div class="row"><button class="btn" type="button" data-act="saveres" ${ctx}>Guardar resumen</button>${n.resumen?`<button class="btn ghost" type="button" data-act="cancel">Cancelar</button>`:""}</div>`
              :`<div class="resumen-prev">${esc(plain(n.resumen).slice(0,420))}…</div><div class="row"><button class="btn" type="button" data-act="read" ${ctx}>Leer resumen completo</button><button class="btn ghost" type="button" data-act="editres" data-tk="${tk}">Editar</button><span class="note" style="margin:0">${words(n.resumen).toLocaleString("es-AR")} palabras</span></div>`}
@@ -853,7 +869,7 @@ function viewLecturas(){
       h+=`<article class="lcls"><div><div class="when">${DIA[x.d.getDay()]} · Clase ${x.i+1}</div><div class="dd">${x.d.getDate()} ${MES[x.d.getMonth()].slice(0,3)}</div><div class="mod">${esc(x.c.mod||"")}${mc==="hib"&&x.s.aula?` · Aula ${esc(x.s.aula)}`:""}</div></div>
         <div style="min-width:0"><button class="btn link" type="button" data-sub="${x.s.id}" data-cls="${x.i}" style="padding:0;text-decoration:none;text-align:left"><h4>${esc(x.c.tema)}</h4></button><div class="sub">${esc(x.s.name)} · ${esc(x.s.prof)}</div>
         ${txs.length?`<ul class="lread">${txs.map(tx=>{const n=noteOf(x.s,x.i,tx),ctx=`data-s="${x.s.id}" data-i="${x.i}" data-k="${tx.k}"`;
-          return `<li class="${n.leido?"done":""}"><input type="checkbox" id="lec-${x.s.id}-${x.i}-${tx.k}" data-act="leido" ${ctx} ${n.leido?"checked":""} aria-label="Marcar como leído"><span class="tt">${esc(tx.title)}${tx.disc?' <span class="tag ac">Discusión</span>':""}</span>${n.resumen?`<button class="tag ok readlink" type="button" data-act="read" ${ctx}>Leer resumen →</button>`:`<span class="pend" style="font-size:12px;color:var(--muted)">Sin resumen</span>`}</li>`}).join("")}</ul>`:`<div class="note">Sin lecturas asignadas en el programa.</div>`}
+          return `<li class="${n.leido?"done":""}"><input type="checkbox" id="lec-${x.s.id}-${x.i}-${tx.k}" data-act="leido" ${ctx} ${n.leido?"checked":""} aria-label="Marcar como leído"><span class="tt">${esc(tx.title)}${tx.disc?' <span class="tag ac">Discusión</span>':""}</span><span class="lacts">${pdfLink(n,"PDF")}${!n.pdf&&assets?`<button class="tag clipbtn" type="button" data-act="attach" ${ctx} title="Adjuntar PDF original">${CLIP} Adjuntar</button>`:""}${n.resumen?`<button class="tag ok readlink" type="button" data-act="read" ${ctx}>Leer resumen →</button>`:`<span class="pend" style="font-size:12px;color:var(--muted)">Sin resumen</span>`}</span></li>`}).join("")}</ul>`:`<div class="note">Sin lecturas asignadas en el programa.</div>`}
         </div></article>`});
     h+=`</section>`});
   return h;
@@ -931,6 +947,7 @@ function viewRead(){
   return `<button class="back" type="button" data-sub="${s.id}" data-cls="${r.i}">← ${esc(s.name)}</button>
   <article class="reader"><div class="lbl">${esc(s.code)} · Clase ${r.i+1} · ${esc(c.tema)}</div><h2>${esc(tx.title)}</h2>
   <div class="row" style="margin-top:10px"><label class="chk"><input type="checkbox" id="lei-r" data-act="leido" data-s="${s.id}" data-i="${r.i}" data-k="${tx.k}" ${n.leido?"checked":""}> Leído</label><span class="note" style="margin:0">Resumen · ${words(n.resumen).toLocaleString("es-AR")} palabras</span></div>
+  ${pdfRow(n,`data-s="${s.id}" data-i="${r.i}" data-k="${tx.k}"`)}
   <div class="reader-body">${n.resumen?md(n.resumen):'<p class="note">Este texto todavía no tiene resumen.</p>'}</div></article>
   <nav class="readnav" aria-label="Otros resúmenes">${nav(prev,"Anterior")}${nav(next,"Siguiente")}</nav>`;
 }
@@ -967,6 +984,8 @@ document.addEventListener("click",async e=>{
   const b=e.target.closest("[data-act]");if(!b)return;
   const act=b.dataset.act,s=b.dataset.s,i=+b.dataset.i,k=b.dataset.k,key=s?clsKey(s,i):null,tk=key?key+"-"+k:b.dataset.tk;
   if(act==="read"){e.preventDefault();openRead(s,i,k);return}
+  if(act==="attach"){ui.attach={s,i,k};const f=$("#pdfin");f.value="";f.click();return}
+  if(act==="delpdf"){const d=clsDoc(s,i),n=getNote(d,k),old=n.pdf;delete n.pdf;save("clases",key,d);if(assets&&old&&old.id)assets.delete(old.id).catch(()=>{});return}
   if(act==="calprev"||act==="calnext"){const [y,m]=ui.calMonth.split("-").map(Number);const d=new Date(y,m-1+(act==="calnext"?1:-1),1);ui.calMonth=mKey(d);ui.calDay=null;render();return}
   if(act==="caltoday"){ui.calMonth=mKey(today());ui.calDay=iso(today());render();return}
   if(act==="calday"){const ds=b.dataset.day;if(!ds.startsWith(ui.calMonth))ui.calMonth=ds.slice(0,7);ui.calDay=ui.calDay===ds?null:ds;render();return}
@@ -994,7 +1013,13 @@ document.addEventListener("click",async e=>{
   if(act==="markpast"){const t=today(),cur=`${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,"0")}`;
     const ks=monthsList().filter(m=>m<cur&&monthStatus(m)[0]==="sinreg");for(const m of ks){await save("pagos",m,{estado:"pagado",monto:PAY.ultimo,fecha:"",comprobante:""})}return}
 });
-document.addEventListener("change",e=>{const b=e.target;if(b.dataset.act!=="leido")return;const s=b.dataset.s,i=+b.dataset.i,k=b.dataset.k;
+document.addEventListener("change",async e=>{const b=e.target;
+  if(b.id==="pdfin"){const f=b.files&&b.files[0],t=ui.attach;ui.attach=null;if(!f||!t||!assets)return;
+    if(f.size>20*1024*1024){toast("El PDF supera los 20 MB");return}
+    toast("Subiendo PDF…");
+    try{const a=await assets.upload(f);const d=clsDoc(t.s,t.i);getNote(d,t.k).pdf={id:a.id,url:a.url,name:f.name};save("clases",clsKey(t.s,+t.i),d)}
+    catch(err){toast("No se pudo subir el PDF")}return}
+  if(b.dataset.act!=="leido")return;const s=b.dataset.s,i=+b.dataset.i,k=b.dataset.k;
   const d=clsDoc(s,i);getNote(d,k).leido=b.checked;save("clases",clsKey(s,i),d)});
 
 const _r=render;render=function(){_r();persist()};
