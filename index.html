@@ -208,6 +208,24 @@ textarea.sm{min-height:60px}
 .grow .gv input{width:64px;padding:5px 8px}
 .grow .pend{font-size:12px;color:var(--muted)}
 
+
+/* la maestría */
+.mgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:0 32px;margin-top:22px}
+.mblock{border-top:1px solid var(--ink);padding:14px 0 22px;min-width:0}
+.mblock h3{font-size:30px;font-weight:400;line-height:1.05;margin-top:4px}
+.mblock p{margin:8px 0 0;max-width:62ch}
+.mlist{list-style:none;margin:10px 0 0;padding:0}
+.mlist li{padding:7px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.mlist li span:last-child{color:var(--muted);font-size:12.5px}
+.mlist li.ok span:first-child::before{content:"✓ ";color:var(--ok)}
+.mfacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0 24px;margin-top:22px}
+.mfacts div{border-top:1px solid var(--ink);padding:10px 0 14px}
+.mfacts b{display:block;font-family:var(--f-display);font-size:30px;font-weight:400;line-height:1.05;color:var(--ink);font-variant-numeric:lining-nums}
+.mfacts span{font-size:12.5px;color:var(--muted)}
+.plan2{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:4px}
+.pcard{border-top:1px solid var(--ink);padding:10px 0;min-width:0}
+.pcard .short{font-family:var(--f-display);font-size:22px;line-height:1.1;color:var(--ink)}
+.pcard .code{font-size:10px;letter-spacing:.18em;font-weight:600;text-transform:uppercase;color:var(--muted)}
 /* lecturas */
 .wk{margin-top:30px}
 .wk>.ysum h2{font-size:clamp(34px,5vw,56px)}
@@ -336,6 +354,7 @@ input,textarea{border-radius:0!important}
       <button id="tab-calendario" type="button" data-go="calendario">Calendario</button>
       <button id="tab-promedio" type="button" data-go="promedio">Promedio</button>
       <button id="tab-cuotas" type="button" data-go="cuotas">Cuotas</button>
+      <button id="tab-maestria" type="button" data-go="maestria">La maestría</button>
     </nav>
   </header>
   <div id="notice" class="notice" hidden></div>
@@ -576,6 +595,16 @@ const DEADLINES = [
  {d:"2026-12-11",txt:"Proyecto de cooperación, hasta el 11 de diciembre",id:"EI27"},
  {d:"2027-01-25",txt:"Ensayo individual, hasta el 25 de enero",id:"EI12"}
 ];
+const PLAN = {
+ total:18,
+ anio2:["Derecho Internacional Público","Finanzas y Política Internacional","Relaciones Internacionales de América del Sur","Sociedad Civil y Orden Global","Formulación y Análisis de la Política Exterior"],
+ orient:[
+  {n:"Orientación profesional",d:"Termina con un trabajo final aplicado.",m:["3 materias optativas","Taller de Trabajo Final"]},
+  {n:"Orientación académica",d:"Termina con una tesis académica.",m:["3 materias del bloque metodológico","Taller de Tesis"]}],
+ optativas:["Diseño y Gestión de Proyectos de Cooperación Internacional","Proyecto Capstone","Tópicos de Seguridad Internacional","Geopolítica en Asia Pacífica","Tópicos de la Política Económica en América del Sur","Políticas y Conflictos en Medio Oriente","Medio Ambiente, Recursos Naturales y Cambio Climático","China en América Latina"],
+ intercambio:[["Centro de Investigación y Docencia Económicas (CIDE)","Ciudad de México, México"],["European University Institute","Florencia, Italia"],["Hankuk University of Foreign Studies","Seúl, Corea del Sur"],["Institut d’Études Politiques de Paris (Sciences Po)","París, Francia"],["The George Washington University, Elliott School of International Affairs","Washington D. C., EE. UU."],["The University of North Carolina at Chapel Hill","Chapel Hill, EE. UU."],["Universidad de los Andes","Bogotá, Colombia"],["Universidade do Estado do Rio de Janeiro","Río de Janeiro, Brasil"],["Universität zu Köln","Colonia, Alemania"],["Vytautas Magnus University","Kaunas, Lituania"]],
+ fulltime:[["Jorge Battaglino","Ph.D. in Latin American Government and Politics, University of Essex"],["Jorge Garzón","Dr. Phil., Political Science, University of Hamburg"],["Alejandro Milcíades Peña","Ph.D. in International Politics, City University of London · Director de los posgrados"],["Enrique Peruzzotti","Ph.D. in Sociology, New School for Social Research"],["Ignacio Rullansky","Doctor en Ciencias Sociales, UBA"],["Hayley Stevenson","Ph.D. in International Relations, University of Adelaide · Directora del Departamento"],["Patricio Yamin","Doctor en Estudios Internacionales, UTDT · Director General de Estudios"]]
+};
 const CRONO = [
  {d:"2026-10-09",tipo:"evento",txt:"Evento social"},
  {d:"2026-10-12",tipo:"feriado",txt:"Feriado"},
@@ -659,10 +688,12 @@ function viewMaterias(){
   const now=secs.filter(x=>x.k===cur),past=secs.filter(x=>x.k<cur).sort((a,b)=>b.k-a.k),fut=secs.filter(x=>x.k>cur);
   const sec=(x,tag)=>`<section class="tri"><div class="tri-head"><h3>${TRIS[x.tr]}</h3><span class="lbl">${x.y.label} · ${TRI_RANGE[x.tr]} ${x.y.anio}</span>${tag?`<span class="pill">${tag}</span>`:""}</div>
     ${x.list.length?`<div class="grid">${x.list.map(card).join("")}</div>`:`<div class="empty">Todavía no hay materias en este trimestre. Cuando tengas los programas, mandámelos y las sumo.</div>`}</section>`;
-  h+=`<div class="year" id="actual"><div class="ysum"><h2>Cursando ahora</h2></div>${now.map(x=>sec(x,"En curso")).join("")}</div>`;
+  h+=`<div class="year" id="actual">${now.map(x=>sec(x,"En curso")).join("")}</div>`;
   if(past.length)h+=`<div class="year" id="pasado"><div class="ysum"><h2>Cursadas</h2></div>${past.map(x=>sec(x,"")).join("")}</div>`;
   const futList=fut.filter(x=>x.list.length);
-  h+=`<div class="year" id="futuro"><div class="ysum"><h2>Lo que viene</h2></div>${futList.length?futList.map(x=>sec(x,"")).join(""):`<div class="empty" style="margin-top:16px">El año 2 (2027) todavía no tiene materias cargadas. Cuando tengas los programas, mandámelos y las sumo.</div>`}</div>`;
+  h+=`<div class="year" id="futuro"><div class="ysum"><h2>Lo que viene</h2></div>${futList.length?futList.map(x=>sec(x,"")).join(""):""}<section class="tri"><div class="tri-head"><h3>Año 2 · 2027</h3><span class="lbl">Plan de estudios · trimestres a confirmar</span></div>
+    <div class="plan2">${PLAN.anio2.map(n=>`<div class="pcard"><div class="code">Obligatoria</div><div class="short">${esc(n)}</div></div>`).join("")}${PLAN.orient.map(o=>`<div class="pcard"><div class="code">${esc(o.n)}</div><div class="short">${o.m.map(esc).join(" + ")}</div></div>`).join("")}</div>
+    <p class="note">Cuando tengas los programas de 2027, mandámelos y armo las carpetas con clases, docentes y lecturas.</p></section></div>`;
   return h;
 }
 function exercisesHTML(n,ctx){const ex=n.ejercicios||[];
@@ -760,7 +791,7 @@ function careerProgress(){const t=today(),segs=[];
   const cur=segs.find(s=>s.f>0&&s.f<1);return{segs,pct,done,cur}}
 function progressHTML(){const p=careerProgress(),apr=SUBJECTS.filter(s=>notaOf(s.id)!=null).length;
   return `<section class="prog" aria-label="Avance de la carrera"><div class="ph"><span class="lbl">Avance de la carrera</span><span class="pct">${p.pct}%</span>
-    <span class="pk">${p.done} de 6 trimestres terminados${p.cur?` · cursando el ${TRIS[p.cur.tr].toLowerCase()} del ${p.cur.y.label.toLowerCase()}`:""} · ${apr} materia${apr===1?"":"s"} con nota</span></div>
+    <span class="pk">${SUBJECTS.filter(s=>s.year<CURRENT.year||(s.year===CURRENT.year&&s.tri<=CURRENT.tri)).length} de ${PLAN.total} materias cursadas o en curso · ${p.done} de 6 trimestres terminados${p.cur?` · cursando el ${TRIS[p.cur.tr].toLowerCase()} del ${p.cur.y.label.toLowerCase()}`:""} · ${apr} materia${apr===1?"":"s"} con nota</span></div>
     <div class="segs" role="progressbar" aria-valuenow="${p.pct}" aria-valuemin="0" aria-valuemax="100">${p.segs.map(s=>`<div class="seg" title="${s.y.label} · ${TRIS[s.tr]}"><i style="width:${Math.round(s.f*100)}%"></i></div>`).join("")}</div>
     <div class="seglab">${p.segs.map(s=>`<span class="${s.tr===1?"yr":""}">T${s.tr} ${s.y.anio}</span>`).join("")}</div></section>`}
 /* promedio */
@@ -784,6 +815,35 @@ function viewPromedio(){
   return h+`</section>`;
 }
 
+
+/* la maestría */
+function viewMaestria(){
+  const cursadas=SUBJECTS.filter(s=>s.year<CURRENT.year||(s.year===CURRENT.year&&s.tri<=CURRENT.tri)).length;
+  let h=`<div class="mfacts"><div><b>2 años</b><span>6 trimestres, part-time, más el trabajo final</span></div><div><b>18 materias</b><span>${cursadas} cursadas o en curso</span></div><div><b>Lun · Mar · Jue</b><span>de 19 a 22 h, formato híbrido</span></div><div><b>Top 100</b><span>Departamento entre los 100 mejores del mundo, ranking QS</span></div></div>`;
+  h+=`<div class="mgrid">
+  <section class="mblock"><div class="lbl">Primer año</div><h3>Fundamentos teóricos, conceptuales y prácticos</h3><p>9 materias obligatorias.</p><ul class="mlist">${SUBJECTS.filter(s=>s.year===1).map(s=>`<li class="${notaOf(s.id)!=null?"ok":""}"><span>${esc(s.name)}</span><span>${TRIS[s.tri]}</span></li>`).join("")}</ul></section>
+  <section class="mblock"><div class="lbl">Segundo año</div><h3>Consolidación, profundización y especialización</h3><p>5 materias obligatorias y una orientación.</p><ul class="mlist">${PLAN.anio2.map(n=>`<li><span>${esc(n)}</span><span>Obligatoria</span></li>`).join("")}</ul>
+    ${PLAN.orient.map(o=>`<p style="margin-top:14px"><b>${esc(o.n)}.</b> ${esc(o.d)} ${o.m.map(esc).join(" + ")}.</p>`).join("")}</section>
+  <section class="mblock"><div class="lbl">Seminarios optativos</div><h3>Para especializarte</h3><ul class="mlist">${PLAN.optativas.map(n=>`<li><span>${esc(n)}</span></li>`).join("")}</ul>
+    <p style="margin-top:14px"><b>Proyecto Capstone.</b> Optativa de segundo año, en once reuniones. Combina sesiones prácticas sobre competencias transversales con profesionales del sector público, privado y la sociedad civil (incluidos graduados que trabajan en el BID, el Banco Mundial y la ONU) con un trabajo de consultoría.</p></section>
+  <section class="mblock"><div class="lbl">Intercambio</div><h3>Un semestre afuera</h3><p>Durante la segunda parte del segundo año. Los cupos son limitados y selectivos.</p><ul class="mlist">${PLAN.intercambio.map(([n,c])=>`<li><span>${esc(n)}</span><span>${esc(c)}</span></li>`).join("")}</ul></section>
+  <section class="mblock"><div class="lbl">Doctorado en Estudios Internacionales</div><h3>Si querés seguir</h3><p>Los graduados de la Maestría solo deben aprobar el bloque metodológico; quienes hicieron la orientación académica están exceptuados. Después se rinden dos exámenes comprensivos y se escribe y defiende una tesis con aporte original. Dura en promedio 5 años.</p></section>
+  <section class="mblock"><div class="lbl">Cuerpo docente full-time</div><h3>Profesores del Departamento</h3><ul class="mlist">${PLAN.fulltime.map(([n,c])=>`<li><span>${esc(n)}</span><span>${esc(c)}</span></li>`).join("")}</ul></section>
+  <section class="mblock"><div class="lbl">Recursos</div><h3>Para aprovechar</h3><ul class="mlist">
+    <li><span>Biblioteca Di Tella</span><span>Más de 240.000 libros y 115.000 revistas, bases de datos y archivos</span></li>
+    <li><span>Portal de empleos</span><span>Más de 1500 empresas e instituciones publican búsquedas</span></li>
+    <li><span>Bus ditelliano</span><span>Gratis, lunes a viernes de 7 a 22.25 h, conecta con subte D, tren Mitre y Metrobus Norte</span></li>
+    <li><span>Becas y ayuda financiera</span><span>Consultar en la Oficina de Admisiones</span></li></ul></section>
+  <section class="mblock"><div class="lbl">Contacto</div><h3>Admisiones de posgrado</h3><ul class="mlist">
+    <li><span>Correo</span><span>posgradosditella@utdt.edu</span></li>
+    <li><span>WhatsApp</span><span>(+54 911) 5571 9552</span></li>
+    <li><span>Teléfono</span><span>(+54 11) 5169 7231 / 7251</span></li>
+    <li><span>Campus</span><span>Av. Figueroa Alcorta 7350, Belgrano, CABA</span></li>
+    <li><span>Sitio</span><span><a href="https://www.utdt.edu/mei" target="_blank" rel="noopener">utdt.edu/mei</a></span></li>
+    <li><span>Acreditación</span><span>Resolución SPU N° 146/2023 · CONEAU Res. N° 31/2024</span></li></ul></section>
+  </div>`;
+  return h;
+}
 /* lecturas */
 function weekStart(d){const x=new Date(d);x.setDate(x.getDate()-((x.getDay()+6)%7));return x}
 function viewLecturas(){
@@ -892,7 +952,7 @@ function render(){
   pending=false;
   document.querySelectorAll("nav.tabs button").forEach(b=>b.setAttribute("aria-current",b.dataset.go===ui.view?"page":"false"));
   const y=scrollY;
-  $("#app").innerHTML= ui.view==="cuotas"?viewCuotas(): ui.view==="lecturas"?viewLecturas(): ui.view==="calendario"?viewCalendario(): ui.view==="promedio"?viewPromedio(): ui.read?viewRead(): ui.subject?viewSubject(sub(ui.subject)):viewMaterias();
+  $("#app").innerHTML= ui.view==="cuotas"?viewCuotas(): ui.view==="lecturas"?viewLecturas(): ui.view==="maestria"?viewMaestria(): ui.view==="calendario"?viewCalendario(): ui.view==="promedio"?viewPromedio(): ui.read?viewRead(): ui.subject?viewSubject(sub(ui.subject)):viewMaterias();
   scrollTo(0,y);
 }
 document.addEventListener("focusout",()=>setTimeout(()=>{if(pending)render()},0));
@@ -949,7 +1009,7 @@ document.addEventListener("change",e=>{const b=e.target;if(b.dataset.act!=="leid
 const _r=render;render=function(){_r();persist()};
 /* inicio */
 (function init(){const h=(location.hash||"").slice(1);
-  if(h==="cuotas")ui.view="cuotas";else if(h==="calendario")ui.view="calendario";else if(h==="lecturas")ui.view="lecturas";else if(h==="promedio")ui.view="promedio";else if(h.startsWith("m-")&&sub(h.slice(2))){ui.subject=h.slice(2)}
+  if(h==="cuotas")ui.view="cuotas";else if(h==="calendario")ui.view="calendario";else if(h==="lecturas")ui.view="lecturas";else if(h==="maestria")ui.view="maestria";else if(h==="promedio")ui.view="promedio";else if(h.startsWith("m-")&&sub(h.slice(2))){ui.subject=h.slice(2)}
   else if(h.startsWith("r-")){const m=h.match(/^r-([A-Z0-9]+)-c(\d+)-(x?\d+)$/);if(m&&sub(m[1])){ui.subject=m[1];ui.read={s:m[1],i:+m[2]-1,k:m[3]}}}
   render();
 })();
