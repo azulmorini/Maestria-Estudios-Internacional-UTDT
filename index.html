@@ -3,26 +3,26 @@
 <title>Maestría Estudios Internacionales - UTDT</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Instrument+Sans:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Archivo:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: cuaderno de cátedra. Encabezado con pestañas, carpetas por año y trimestre, materias como cartas ilustradas; detalle por clase y texto. */
+/* Layout: estudio editorial en papel crudo y tinta roja. Título enorme en serif de alto contraste, rótulos chicos en versalitas espaciadas, filetes rojos finos, retratos en duotono rojo. */
 :root{
-  --paper:#F1F2CF; --card:#FBFBEC; --ink:#1F1B2D; --muted:#5E5A70; --line:#D7D8AE;
-  --accent:#6E4FE0; --accent-soft:#E4DCFF;
-  --ok:#2D7A4F; --ok-soft:#D3EEDC; --warn:#A55D00; --warn-soft:#FBE6C4; --bad:#B4302A; --bad-soft:#F8D6D2;
+  --paper:#ECE2D4; --card:#F2EADF; --ink:#C02D1A; --text:#B42A18; --muted:#C35F49; --line:#DDB3A3;
+  --accent:#C02D1A; --accent-soft:#F0D5CA;
+  --ok:#2F6F4A; --ok-soft:#D7E6D3; --warn:#9A5A00; --warn-soft:#F3DFC0; --bad:#A3241A; --bad-soft:#F2CFC6;
   --panel-ink:#1F1B2D;
-  --f-display:"Newsreader", "Iowan Old Style", Georgia, serif;
-  --f-ui:"Instrument Sans", "Segoe UI", system-ui, sans-serif;
+  --f-display:"Cormorant Garamond", "Bodoni 72", Didot, Georgia, serif;
+  --f-ui:"Archivo", "Helvetica Neue", Arial, sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --paper:#16141D; --card:#211E2A; --ink:#ECEAD3; --muted:#A8A4B9; --line:#363241;
-  --accent:#A792FF; --accent-soft:#2E2747;
-  --ok:#7FD3A0; --ok-soft:#1D3527; --warn:#F2B866; --warn-soft:#3A2B14; --bad:#FF8F86; --bad-soft:#3E1D1B;
+  --paper:#1A1110; --card:#221615; --ink:#EE6B52; --text:#E8806A; --muted:#BF7F6F; --line:#4B2B24;
+  --accent:#EE6B52; --accent-soft:#3B1D17;
+  --ok:#86CFA0; --ok-soft:#1E3326; --warn:#E8B062; --warn-soft:#3A2A14; --bad:#FF8C7E; --bad-soft:#3E1B18;
   color-scheme:dark}}
 :root[data-theme="dark"]{
-  --paper:#16141D; --card:#211E2A; --ink:#ECEAD3; --muted:#A8A4B9; --line:#363241;
-  --accent:#A792FF; --accent-soft:#2E2747;
-  --ok:#7FD3A0; --ok-soft:#1D3527; --warn:#F2B866; --warn-soft:#3A2B14; --bad:#FF8F86; --bad-soft:#3E1D1B;
+  --paper:#1A1110; --card:#221615; --ink:#EE6B52; --text:#E8806A; --muted:#BF7F6F; --line:#4B2B24;
+  --accent:#EE6B52; --accent-soft:#3B1D17;
+  --ok:#86CFA0; --ok-soft:#1E3326; --warn:#E8B062; --warn-soft:#3A2A14; --bad:#FF8C7E; --bad-soft:#3E1B18;
   color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--paper);color:var(--ink);font-family:var(--f-ui);font-size:15px;line-height:1.5;
@@ -258,14 +258,64 @@ textarea.sm{min-height:60px}
 .undated{margin-top:30px}
 .undated h3{font-size:22px}
 .undated ul{margin:8px 0 0;padding-left:1.1em;font-size:14px;color:var(--muted)}
+
+/* ===== Estética editorial (capa final) ===== */
+body{color:var(--text);font-size:14px}
+h1,h2,h3,h4{font-weight:500;letter-spacing:-.015em;color:var(--ink)}
+.lbl{font-size:10px;letter-spacing:.18em;color:var(--ink);font-weight:600}
+.topline{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding-block:20px 0;font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--ink)}
+.topline span:last-child{text-align:right}
+.topline .mark{width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-family:var(--f-display);font-size:15px;letter-spacing:0;text-transform:none;font-style:italic}
+header.top{border-bottom:1px solid var(--ink);padding-block:34px 26px;align-items:flex-end}
+header.top h1{font-size:clamp(44px,7.4vw,96px);line-height:.94;font-weight:400;letter-spacing:-.035em}
+header.top h1 em{color:var(--ink);font-style:italic;font-weight:400}
+nav.tabs{gap:6px 28px}
+nav.tabs button{border:none;border-bottom:1px solid var(--ink);border-radius:0;padding:4px 0;min-width:120px;display:flex;justify-content:space-between;gap:18px;font-family:var(--f-display);font-size:22px;font-weight:500;color:var(--ink);background:none}
+nav.tabs button::after{content:"→";font-family:var(--f-ui);font-size:15px;transition:transform .2s}
+nav.tabs button:hover::after{transform:translateX(4px)}
+nav.tabs button[aria-current="page"]{background:none;color:var(--ink);font-style:italic;border-bottom-width:3px}
+.notice{border-radius:0;background:transparent;border:1px solid var(--line);color:var(--muted)}
+.mcard,.tcard,.big,.txt,.evcard,.day,.mo,.prog,.editor,.navbtn,.empty,.add{border-radius:0}
+.mcard{background:transparent;border:none;border-top:1px solid var(--ink);padding:12px 0 6px}
+.mcard:hover{transform:none;box-shadow:none}
+.mcard:hover .panel{filter:url(#duo) contrast(1.08)}
+.mcard .short{font-family:var(--f-display);font-size:28px;font-weight:500;letter-spacing:-.01em;text-transform:none;line-height:1.02;color:var(--ink)}
+.mcard .code{color:var(--ink);letter-spacing:.18em;font-size:10px}
+.mcard .prof{color:var(--muted);font-size:17px}
+.panel{border-radius:0;filter:url(#duo);background:#6C6C6C!important}
+.grow .sw{filter:url(#duo);border-radius:0;background:#6C6C6C!important}
+.bar{height:2px;border-radius:0;background:var(--line)}.bar i{background:var(--ink)}
+.year>summary{border-bottom:1px solid var(--ink)}
+.year>summary h2{font-size:clamp(44px,6vw,72px);font-weight:400;letter-spacing:-.03em}
+.tri-head h3,.months-year h3,.undated h3,.gtable h3{font-size:30px;font-weight:400}
+.pill{border-radius:0;background:var(--ink);color:var(--paper)}
+.btn{border-radius:0;background:var(--ink);border-color:var(--ink);color:var(--paper);letter-spacing:.08em;text-transform:uppercase;font-size:11px;padding:8px 14px}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.link{color:var(--ink);text-transform:none;letter-spacing:0;font-size:13px}
+.tag{border-radius:0}
+.dhead h2,.reader h2,.calbar h2,.big h2{font-weight:400;letter-spacing:-.03em}
+.dhead h2{font-size:clamp(38px,6vw,68px);line-height:.98}
+.calbar h2{font-size:clamp(40px,6vw,72px)}
+.cls .num,.stats .n,.avghero .big .n,.prog .pct{color:var(--ink);font-weight:400}
+.classes{border-top:1px solid var(--ink)}
+.big,.prog,.evcard,.txt,.day,.mo{background:var(--card)}
+.prog{border:none;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);background:transparent;padding:16px 0}
+.seg{border-radius:0;height:6px}.seg i{background:var(--ink)}
+.day.hoy{border-color:var(--ink)}
+.toast{border-radius:0;background:var(--ink);color:var(--paper)}
+a{color:var(--ink)}
+input,textarea{border-radius:0!important}
+@media (max-width:600px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.mcard .short{font-size:21px}.mcard .prof{font-size:14px}.mcard .meta{flex-direction:column;gap:2px}nav.tabs button{min-width:0;font-size:20px}}
+.reader-body{color:var(--text)}
+.reader-body h4,.reader-body h5{color:var(--ink)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
 <div class="wrap">
+  <div class="topline"><span class="mark" aria-hidden="true">mei</span><span>Est. 2026</span><span>UTDT</span></div>
   <header class="top">
     <div>
-      <div class="lbl">Mi maestría</div>
-      <h1>Maestría Estudios Internacionales <em>- UTDT</em></h1>
+      <h1>Maestría <em>Estudios Internacionales</em> - UTDT</h1>
     </div>
     <nav class="tabs" aria-label="Secciones">
       <button id="tab-materias" type="button" data-go="materias">Materias</button>
@@ -278,6 +328,7 @@ textarea.sm{min-height:60px}
   <main id="app"></main>
 </div>
 <div id="toast" class="toast" hidden></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="duo" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".33 .33 .33 0 0  .33 .33 .33 0 0  .33 .33 .33 0 0  0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".60 .72 .95"/><feFuncG type="table" tableValues=".13 .24 .90"/><feFuncB type="table" tableValues=".08 .17 .84"/></feComponentTransfer></filter></svg>
 
 <script>
 /* ============ Ilustraciones (línea) ============ */
