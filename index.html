@@ -633,6 +633,7 @@ const CRONO = [
  {d:"2026-12-11",tipo:"examen",txt:"Semana de recuperación y exámenes"}
 ];
 const CRONO_NOTA="Gobernanza Global tendrá una clase a recuperar; la fecha se informa después del comienzo de clases.";
+const LEGAJO = "26A3116";
 const PAY = {id:"197692",portal:"https://www.utdt.edu/pagos",mail:"facturacion@utdt.edu",ultimo:366885,first:"2026-03",last:"2027-12"};
 
 /* ============ Estado y datos guardados ============ */
@@ -816,7 +817,7 @@ const fmtN=n=>n.toLocaleString("es-AR",{maximumFractionDigits:2});
 const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
 function viewPromedio(){
   const all=SUBJECTS.map(s=>notaOf(s.id)).filter(n=>n!=null),g=avg(all);
-  let h=`<section class="avghero"><div class="big"><div class="lbl">Promedio general</div><div class="n">${g!=null?fmtN(g):"—"}</div><div class="k">${all.length} de ${SUBJECTS.length} materias con nota</div></div>`;
+  let h=`<section class="avghero"><div class="big"><div class="lbl">Promedio general</div><div class="n">${g!=null?fmtN(g):"—"}</div><div class="k">${all.length} de ${SUBJECTS.length} materias con nota · Legajo ${LEGAJO}</div></div>`;
   YEARS.forEach(y=>{const ns=SUBJECTS.filter(s=>s.year===y.n).map(s=>notaOf(s.id)).filter(n=>n!=null),a=avg(ns);
     h+=`<div class="big"><div class="lbl">${y.label} · ${y.anio}</div><div class="n">${a!=null?fmtN(a):"—"}</div><div class="k">${ns.length?`${ns.length} materia${ns.length>1?"s":""} con nota`:"Sin notas todavía"}</div></div>`});
   h+=`</section><section class="gtable">`;
